@@ -7,7 +7,8 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:session][:email].downcase)
     if user && (user == user.authenticate(params[:session][:password]))
       flash.now[:success] = "Welcome #{user.name}"
-      log_in user #method defined in sessions helper
+      log_in user # method defined in sessions helper
+      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
       redirect_to user
     else
       flash.now[:danger] = 'Invalid credentials'
@@ -16,9 +17,9 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session.delete(:user_id)
-    @current_user = nil
+    log_out if logged_in?
     flash[:danger] = 'logged out'
     redirect_to root_url
   end
 end
+
