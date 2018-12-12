@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
       flash.now[:success] = "Welcome #{user.name}"
       log_in user # method defined in sessions helper
       params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-      redirect_to user
+      redirect_back_or user
     else
       flash.now[:danger] = 'Invalid credentials'
       render :new
@@ -22,4 +22,3 @@ class SessionsController < ApplicationController
     redirect_to root_url
   end
 end
-
