@@ -39,6 +39,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.where(activated: 1).find_by(id: params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page])
     redirect_to root_path, flash: { danger: 'User not found' } if @user.nil?
   end
 
